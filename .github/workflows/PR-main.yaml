@@ -1,24 +1,31 @@
 name: PR build and run tests
 
 on:
-pull_request:
-branches:
-  - main
+  pull_request:
+    branches:
+    - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
+    - name: Clone
+      run: |
+          git fetch origin
+          git checkout main
+          git pull --unshallow
     - name : Install dependency packages 
       run: |
           sudo apt install -y --no-install-recommends \
             git \
             cmake \
             clang-format
-    - name : Format
-      run: find . -regex '.*\.\(cpp\|hpp\|cxx\|cp\|cc\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;
+    # - name : Format
+    #   run: find . -regex '.*\.\(cpp\|hpp\|cxx\|cp\|cc\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;
     - name : Configure
       run: |
+          ls
           cmake -DBUILD_TESTING=ON -S . -B build
     - name : Build
       run: |
@@ -27,4 +34,3 @@ jobs:
       run: |
           cd build
           ctest
-  -
