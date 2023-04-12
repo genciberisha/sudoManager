@@ -21,15 +21,12 @@ jobs:
             git \
             cmake \
             clang-format
-    # - name : Format
-    #   run: find . -regex '.*\.\(cpp\|hpp\|cxx\|cp\|cc\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;
+    - name : Format
+      run: find . -regex '.*\.\(cpp\|hpp\|cxx\|cp\|cc\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;
     - name : Configure
-      run: |
-          ls
-          cmake -DBUILD_TESTING=ON -S . -B build
+      run: cmake -DBUILD_TESTING=ON -S . -B build
     - name : Build
-      run: |
-          cmake --build build -j$(nproc -all)
+      run: cmake --build build -j$(nproc -all)
     - name : Run Tests
       run: |
           cd build
